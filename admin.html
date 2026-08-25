@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Add Resource — B.Sc. Computer Science</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:wght@500;600&family=Inter:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="css/style.css">
+<style>
+.admin-wrap{max-width:760px;margin:0 auto;padding:3rem 1.25rem}.admin-card{background:#fff;border:1px solid #ddd;border-radius:18px;padding:1.5rem;box-shadow:0 12px 35px rgba(0,0,0,.06)}
+.admin-card h1{margin-top:0}.form-grid{display:grid;gap:1rem}.form-grid label{display:grid;gap:.4rem;font-weight:600}.form-grid input,.form-grid select{font:inherit;padding:.8rem .9rem;border:1px solid #cfcfcf;border-radius:10px;background:#fff}.admin-actions{display:flex;gap:.75rem;flex-wrap:wrap;margin-top:1rem}.admin-actions button{border:0;border-radius:10px;padding:.8rem 1rem;font:inherit;font-weight:600;cursor:pointer}.primary{background:#111;color:#fff}.secondary{background:#eee;color:#111}.status{margin-top:1rem;padding:.8rem;border-radius:10px;background:#f4f4f4;white-space:pre-wrap}.hint{color:#666;font-size:.9rem}.hidden{display:none}
+</style>
+</head>
+<body>
+<div class="admin-wrap">
+  <a class="back-link" href="index.html">← Course Hub</a>
+  <div class="admin-card">
+    <p class="eyebrow">Resource manager</p>
+    <h1>Manage course resources</h1>
+    <p class="hint">Upload the PDF to your chosen cloud storage first, copy its share URL, then enter the details below. In production, the form can save directly to Cloudflare D1 through the Pages Function.</p>
+
+    <form id="resource-form" class="form-grid">
+      <label>File / resource name
+        <input name="name" required placeholder="Python Lecture 9 — Functions">
+      </label>
+      <label>File URL
+        <input name="url" type="url" required placeholder="https://drive.google.com/...">
+      </label>
+      <label>Semester
+        <select name="semester" id="semester" required></select>
+      </label>
+      <label>Subject
+        <select name="subject" id="subject" required></select>
+      </label>
+      <label>Category
+        <select name="category" required>
+          <option value="notes">Notes</option>
+          <option value="tutorials">Tutorials</option>
+          <option value="practicals">Practical Files</option>
+          <option value="project">Project Files</option>
+          <option value="pyqs">PYQs</option>
+        </select>
+      </label>
+      <label>Admin token <span class="hint">(required only when the D1 API is enabled)</span>
+        <input name="token" type="password" placeholder="Your Cloudflare ADMIN_TOKEN">
+      </label>
+      <div class="admin-actions">
+        <button class="primary" type="submit">Save resource</button>
+        <button class="secondary" type="button" id="export-btn">Export JSON entry</button>
+      </div>
+    </form>
+    <div id="status" class="status hidden"></div>
+
+    <hr style="border:0;border-top:1px solid #e5e5e5;margin:1.5rem 0">
+    <p class="eyebrow">Subject manager</p>
+    <h2>Add a subject</h2>
+    <p class="hint">Create a subject in any semester. It will start with 0 files, and you can then add resources to it.</p>
+    <form id="subject-form" class="form-grid">
+      <label>Semester
+        <select name="semester" id="subject-semester" required></select>
+      </label>
+      <label>Subject name
+        <input name="name" required placeholder="Data Structures">
+      </label>
+      <label>Description (optional)
+        <input name="description" placeholder="Data structures and algorithms">
+      </label>
+      <div class="admin-actions"><button class="primary" type="submit">Add subject</button></div>
+    </form>
+    <div id="subject-status" class="status hidden"></div>
+  </div>
+</div>
+<script>
+const sem = document.getElementById('semester');
+for(let i=1;i<=8;i++) sem.insertAdjacentHTML('beforeend', `<option value="${i}">Semester ${i}</option>`);
+const subject = document.getElementById('subject');
+async function refreshSubjects(){
+  subject.innerHTML = '<option>Loading…</option>';
+  try {
+    const res = await fetch(`/sem-${sem.value}/data/subjects.json`);
+    if(!res.ok) throw new Error('No subject list');
+    const subjects = await res.json();
+    subject.innerHTML = subjects.length
+      ? subjects.map(s => `<option value="${s.slug}">${s.name}</option>`).join('')
+      : '<option value="">No subjects added yet</option>';
+  } catch {
+    try {
+      const local = JSON.parse(localStorage.getItem(`bsc-subjects-sem-${sem.value}`) || '[]');
+      subject.innerHTML = local.length
+        ? local.map(s => `<option value="${s.slug}">${s.name}</option>`).join('')
+        : '<option value="">No subjects added yet</option>';
+    } catch {
+      subject.innerHTML = '<option value="">No subjects added yet</option>';
+    }
+  }
+}
+sem.addEventListener('change', refreshSubjects); refreshSubjects();
+const form = document.getElementById('resource-form');
+const status = document.getElementById('status');
+function show(msg){status.textContent=msg;status.classList.remove('hidden');}
+function payload(){ const fd=new FormData(form); return {name:fd.get('name').trim(),url:fd.get('url').trim(),semester:Number(fd.get('semester')),subject:fd.get('subject'),category:fd.get('category')}; }
+form.addEventListener('submit', async e=>{
+  e.preventDefault();
+  const fd=new FormData(form); const data=payload();
+  try{
+    const res=await fetch('/api/resources',{method:'POST',headers:{'Content-Type':'application/json','X-Admin-Token':fd.get('token')||''},body:JSON.stringify(data)});
+    const out=await res.json().catch(()=>({}));
+    if(!res.ok) throw new Error(out.error || `Save failed (${res.status})`);
+    show('Saved successfully. Refresh the course page to see the new resource and updated count.');
+    form.reset(); refreshSubjects();
+  }catch(err){ show('The production API is not configured yet, or the token is wrong.\n\n'+err.message+'\n\nUse “Export JSON entry” below as a local fallback until D1 is connected.'); }
+});
+document.getElementById('export-btn').addEventListener('click',()=>{
+  const data=payload();
+  data.id = `${data.semester}-${data.subject}-${Date.now()}`;
+  const blob=new Blob([JSON.stringify(data,null,2)],{type:'application/json'});
+  const a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download='resource-entry.json';a.click();URL.revokeObjectURL(a.href);
+  show('Exported resource-entry.json. Add this object to data/resources.json if you are using the static fallback.');
+});
+
+const subjectSem = document.getElementById('subject-semester');
+for(let i=1;i<=8;i++) subjectSem.insertAdjacentHTML('beforeend', `<option value="${i}">Semester ${i}</option>`);
+const subjectForm = document.getElementById('subject-form');
+const subjectStatus = document.getElementById('subject-status');
+function showSubject(msg){subjectStatus.textContent=msg;subjectStatus.classList.remove('hidden');}
+subjectForm.addEventListener('submit', async e=>{
+  e.preventDefault();
+  const fd=new FormData(subjectForm);
+  const data={name:fd.get('name').trim(),description:fd.get('description').trim(),semester:Number(fd.get('semester'))};
+  const token=document.querySelector('input[name="token"]')?.value||'';
+  try{
+    const res=await fetch('/api/subjects',{method:'POST',headers:{'Content-Type':'application/json','X-Admin-Token':token},body:JSON.stringify(data)});
+    const out=await res.json().catch(()=>({}));
+    if(!res.ok) throw new Error(out.error || `Save failed (${res.status})`);
+    showSubject(`Added “${data.name}” to Semester ${data.semester}.`); subjectForm.reset(); sem.value=String(data.semester); refreshSubjects();
+  }catch(err){
+    const slug=data.name.toLowerCase().replace(/&/g,'and').replace(/[^a-z0-9]+/g,'-').replace(/^-+|-+$/g,'');
+    const key=`bsc-subjects-sem-${data.semester}`;
+    let list=[];
+    try{ list=JSON.parse(localStorage.getItem(key)||'[]'); }catch{}
+    if(list.some(s=>s.slug===slug)){ showSubject('That subject already exists in this browser.'); return; }
+    list.push({slug,name:data.name,description:data.description,semester:data.semester});
+    localStorage.setItem(key,JSON.stringify(list));
+    showSubject(`Added “${data.name}” to Semester ${data.semester} on this browser.\n\nFor the live site, connect Cloudflare D1 + ADMIN_TOKEN so every visitor sees the new subject.`);
+    subjectForm.reset(); sem.value=String(data.semester); refreshSubjects();
+  }
+});
+</script>
+</body>
+</html>

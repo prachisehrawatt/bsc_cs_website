@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Semester 2 — Bachelor of Science in Computer Science — Course Hub</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:wght@500;600&family=Inter:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../css/style.css">
+</head>
+<body>
+<div class="shell">
+  <nav class="semnav">
+    <div class="semnav__brand">B.Sc. Computer Science<span>Course Resource Index</span></div>
+    <ul class="semnav__list" id="semnav-list"></ul>
+  </nav>
+
+  <main>
+    <a class="back-link" href="../index.html">← All semesters</a>
+    <p class="eyebrow">Semester 2</p>
+    <h1 class="page-title">Subjects</h1>
+    <p class="page-sub">Each subject links to its Notes, Practical Files, PYQs and Tutorials.</p>
+
+    <div class="subject-grid" id="subject-grid"></div>
+  <p><a class="back-link" href="../admin.html">+ Add a resource</a></p>
+</main>
+</div>
+
+<script src="../js/app.js"></script>
+<script>
+  initSemNav("../", 2);
+  renderSubjectGrid("sem-2");
+</script>
+</body>
+</html>

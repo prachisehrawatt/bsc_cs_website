@@ -1,0 +1,393 @@
+/* ============================================================
+   B.Sc. CS Course Hub — design tokens
+   Palette: aged paper + library-catalog ink & seal gold
+   ============================================================ */
+
+:root {
+  --paper: #F6F1E5;
+  --paper-alt: #EEE5D2;
+  --ink: #1E2A38;
+  --ink-soft: #4A5568;
+  --gold: #A9812F;
+  --line: #D9CDB0;
+  --card-shadow: 0 1px 0 rgba(30, 42, 56, 0.06);
+
+  --font-display: "Fraunces", "Iowan Old Style", serif;
+  --font-body: "Inter", system-ui, -apple-system, sans-serif;
+  --font-mono: "IBM Plex Mono", "SF Mono", monospace;
+
+  --radius: 3px;
+}
+
+* { box-sizing: border-box; }
+
+html { scroll-behavior: smooth; }
+
+body {
+  margin: 0;
+  background: var(--paper);
+  color: var(--ink);
+  font-family: var(--font-body);
+  line-height: 1.5;
+  -webkit-font-smoothing: antialiased;
+}
+
+a { color: inherit; }
+
+/* ---------- Layout shell ---------- */
+
+.shell {
+  display: grid;
+  grid-template-columns: 220px 1fr;
+  min-height: 100vh;
+}
+
+@media (max-width: 800px) {
+  .shell { grid-template-columns: 1fr; }
+  .semnav { position: static; border-right: none; border-bottom: 1px solid var(--line); }
+}
+
+/* ---------- Semester nav (the "ledger tabs") ---------- */
+
+.semnav {
+  position: sticky;
+  top: 0;
+  align-self: start;
+  height: 100vh;
+  overflow-y: auto;
+  border-right: 1px solid var(--line);
+  background: var(--paper-alt);
+  padding: 28px 0;
+}
+
+@media (max-width: 800px) {
+  .semnav { height: auto; }
+}
+
+.semnav__brand {
+  font-family: var(--font-display);
+  font-weight: 600;
+  font-size: 1.05rem;
+  padding: 0 22px 20px;
+  border-bottom: 1px solid var(--line);
+  margin-bottom: 8px;
+  letter-spacing: 0.01em;
+}
+
+.semnav__brand .college {
+  display: block;
+  font-family: var(--font-body);
+  font-size: 0.72rem;
+  font-weight: 500;
+  color: var(--ink-soft);
+  text-transform: none;
+  letter-spacing: 0.01em;
+  margin-top: 6px;
+}
+
+.semnav__brand span {
+  display: block;
+  font-family: var(--font-mono);
+  font-size: 0.68rem;
+  font-weight: 400;
+  color: var(--gold);
+  text-transform: uppercase;
+  letter-spacing: 0.12em;
+  margin-top: 4px;
+}
+
+.semnav__list { list-style: none; margin: 0; padding: 0; }
+
+.semnav__item a {
+  display: flex;
+  align-items: baseline;
+  gap: 10px;
+  text-decoration: none;
+  padding: 9px 22px;
+  color: var(--ink-soft);
+  border-left: 3px solid transparent;
+  font-size: 0.92rem;
+  transition: background 0.15s, color 0.15s, border-color 0.15s;
+}
+
+.semnav__item a:hover {
+  background: rgba(169, 129, 47, 0.08);
+  color: var(--ink);
+}
+
+.semnav__item a.active {
+  border-left-color: var(--gold);
+  color: var(--ink);
+  background: rgba(169, 129, 47, 0.1);
+  font-weight: 600;
+}
+
+.semnav__num {
+  font-family: var(--font-mono);
+  font-size: 0.75rem;
+  color: var(--gold);
+  min-width: 1.4em;
+}
+
+/* ---------- Main content ---------- */
+
+main { padding: 48px 56px 80px; max-width: 980px; }
+
+@media (max-width: 800px) { main { padding: 32px 22px 60px; } }
+
+.eyebrow {
+  font-family: var(--font-mono);
+  font-size: 0.72rem;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--gold);
+  margin: 0 0 10px;
+}
+
+h1.page-title {
+  font-family: var(--font-display);
+  font-size: 2.4rem;
+  font-weight: 600;
+  margin: 0 0 8px;
+  letter-spacing: -0.01em;
+}
+
+.page-sub {
+  color: var(--ink-soft);
+  font-size: 1rem;
+  margin: 0 0 40px;
+  max-width: 60ch;
+}
+
+/* ---------- Home: semester grid ---------- */
+
+.sem-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(210px, 1fr));
+  gap: 18px;
+  margin-top: 8px;
+}
+
+.sem-card {
+  position: relative;
+  display: block;
+  text-decoration: none;
+  background: #fff;
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  padding: 22px 20px 20px;
+  box-shadow: var(--card-shadow);
+  transition: transform 0.15s ease, box-shadow 0.15s ease;
+  overflow: hidden;
+}
+
+.sem-card::before {
+  content: "";
+  position: absolute;
+  top: 0; left: 0;
+  width: 100%;
+  height: 4px;
+  background: var(--gold);
+  transform: scaleX(0);
+  transform-origin: left;
+  transition: transform 0.2s ease;
+}
+
+.sem-card:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 6px 16px rgba(30, 42, 56, 0.1);
+}
+
+.sem-card:hover::before { transform: scaleX(1); }
+
+.sem-card__num {
+  font-family: var(--font-mono);
+  font-size: 0.72rem;
+  color: var(--gold);
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+}
+
+.sem-card__title {
+  font-family: var(--font-display);
+  font-size: 1.35rem;
+  font-weight: 600;
+  margin: 6px 0 4px;
+}
+
+.sem-card__meta {
+  font-size: 0.82rem;
+  color: var(--ink-soft);
+}
+
+/* ---------- Subject "index card" tiles ---------- */
+
+.subject-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(230px, 1fr));
+  gap: 16px;
+}
+
+.subject-card {
+  position: relative;
+  text-decoration: none;
+  display: block;
+  background: #fff;
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  padding: 18px 18px 16px;
+  box-shadow: var(--card-shadow);
+  transition: box-shadow 0.15s ease, transform 0.15s ease;
+}
+
+.subject-card:hover {
+  box-shadow: 0 6px 16px rgba(30, 42, 56, 0.1);
+  transform: translateY(-2px);
+}
+
+/* die-cut catalog tab */
+.subject-card__tab {
+  position: absolute;
+  top: -1px; left: 18px;
+  background: var(--ink);
+  color: var(--paper);
+  font-family: var(--font-mono);
+  font-size: 0.65rem;
+  letter-spacing: 0.06em;
+  padding: 3px 8px;
+  border-radius: 0 0 3px 3px;
+}
+
+.subject-card__title {
+  font-family: var(--font-display);
+  font-size: 1.12rem;
+  font-weight: 600;
+  margin: 14px 0 6px;
+}
+
+.subject-card__meta {
+  font-size: 0.8rem;
+  color: var(--ink-soft);
+  font-family: var(--font-mono);
+}
+
+/* ---------- Subject detail: category tabs ---------- */
+
+.tabbar {
+  display: flex;
+  gap: 4px;
+  border-bottom: 1px solid var(--line);
+  margin-bottom: 24px;
+  flex-wrap: wrap;
+}
+
+.tabbar button {
+  font-family: var(--font-body);
+  font-size: 0.88rem;
+  font-weight: 600;
+  color: var(--ink-soft);
+  background: none;
+  border: none;
+  border-bottom: 2px solid transparent;
+  padding: 10px 4px;
+  margin-right: 22px;
+  cursor: pointer;
+  transition: color 0.15s, border-color 0.15s;
+}
+
+.tabbar button:hover { color: var(--ink); }
+
+.tabbar button.active {
+  color: var(--ink);
+  border-bottom-color: var(--gold);
+}
+
+.filelist { list-style: none; margin: 0; padding: 0; }
+
+.filelist__item {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 13px 16px;
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  margin-bottom: 8px;
+  background: #fff;
+  transition: border-color 0.15s;
+}
+
+.filelist__item:hover { border-color: var(--gold); }
+
+.filelist__name {
+  font-size: 0.94rem;
+  font-weight: 500;
+}
+
+.filelist__tag {
+  font-family: var(--font-mono);
+  font-size: 0.68rem;
+  color: var(--ink-soft);
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+}
+
+.filelist__link {
+  font-family: var(--font-mono);
+  font-size: 0.75rem;
+  text-decoration: none;
+  color: var(--gold);
+  border: 1px solid var(--gold);
+  padding: 5px 10px;
+  border-radius: 2px;
+  white-space: nowrap;
+  transition: background 0.15s, color 0.15s;
+}
+
+.filelist__link:hover { background: var(--gold); color: #fff; }
+
+.empty-state {
+  border: 1px dashed var(--line);
+  border-radius: var(--radius);
+  padding: 30px 24px;
+  color: var(--ink-soft);
+  font-size: 0.92rem;
+  text-align: center;
+}
+
+.empty-state code {
+  font-family: var(--font-mono);
+  background: var(--paper-alt);
+  padding: 2px 6px;
+  border-radius: 2px;
+}
+
+.back-link {
+  display: inline-block;
+  margin-bottom: 18px;
+  font-size: 0.85rem;
+  color: var(--ink-soft);
+  text-decoration: none;
+  font-family: var(--font-mono);
+}
+
+.back-link:hover { color: var(--gold); }
+
+.breadcrumb {
+  font-family: var(--font-mono);
+  font-size: 0.75rem;
+  color: var(--ink-soft);
+  margin-bottom: 6px;
+}
+
+.breadcrumb .sep { margin: 0 6px; color: var(--line); }
+
+.tabbar button .tab-count {
+  display: inline-block;
+  min-width: 1.4em;
+  margin-left: .35rem;
+  padding: .08rem .35rem;
+  border-radius: 999px;
+  background: rgba(0,0,0,.08);
+  font-size: .78em;
+}

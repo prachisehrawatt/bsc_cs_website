@@ -1,0 +1,16 @@
+{
+  "$schema": "node_modules/wrangler/config-schema.json",
+  "name": "bsc-cs-course-hub",
+  "compatibility_date": "2026-08-25",
+  "pages_build_output_dir": ".",
+  "d1_databases": [
+    {
+      "binding": "DB",
+      "database_name": "bsc-cs-resources",
+      "database_id": "REPLACE_WITH_YOUR_D1_DATABASE_ID"
+    }
+  ],
+  "vars": {
+    "ADMIN_TOKEN": "SET_THIS_IN_CLOUDFLARE_DASHBOARD_AS_A_SECRET"
+  }
+}

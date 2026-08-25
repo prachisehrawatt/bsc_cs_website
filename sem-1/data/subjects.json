@@ -1,0 +1,9 @@
+[
+  { "slug": "python", "name": "Python" },
+  { "slug": "html", "name": "HTML" },
+  { "slug": "css", "name": "CSS" },
+  { "slug": "cpp", "name": "C++" },
+  { "slug": "data-engineering-analytics", "name": "Data Engineering & Analytics" },
+  { "slug": "calculus", "name": "Calculus" },
+  { "slug": "mechanics", "name": "Mechanics" }
+]

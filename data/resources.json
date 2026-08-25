@@ -1,0 +1,82 @@
+[
+  {
+    "id": "python-lecture-1",
+    "name": "Lecture 1 — Python Basics",
+    "semester": 1,
+    "subject": "python",
+    "category": "notes",
+    "file": "sem-1/python/notes/lecture1-py.pdf"
+  },
+  {
+    "id": "python-lecture-2",
+    "name": "Lecture 2 — Strings & Conditional Statements",
+    "semester": 1,
+    "subject": "python",
+    "category": "notes",
+    "file": "sem-1/python/notes/lecture2-py.pdf"
+  },
+  {
+    "id": "python-lecture-3",
+    "name": "Lecture 3 — Lists & Tuples",
+    "semester": 1,
+    "subject": "python",
+    "category": "notes",
+    "file": "sem-1/python/notes/lecture3-py.pdf"
+  },
+  {
+    "id": "python-lecture-4",
+    "name": "Lecture 4 — Dictionaries & Sets",
+    "semester": 1,
+    "subject": "python",
+    "category": "notes",
+    "file": "sem-1/python/notes/lecture4-py.pdf"
+  },
+  {
+    "id": "python-lecture-5",
+    "name": "Lecture 5 — Loops",
+    "semester": 1,
+    "subject": "python",
+    "category": "notes",
+    "file": "sem-1/python/notes/lecture5-py.pdf"
+  },
+  {
+    "id": "python-lecture-6",
+    "name": "Lecture 6 — Functions & Recursion",
+    "semester": 1,
+    "subject": "python",
+    "category": "notes",
+    "file": "sem-1/python/notes/lecture6-py.pdf"
+  },
+  {
+    "id": "python-lecture-7",
+    "name": "Lecture 7 — File I/O",
+    "semester": 1,
+    "subject": "python",
+    "category": "notes",
+    "file": "sem-1/python/notes/lecture7-py.pdf"
+  },
+  {
+    "id": "python-lecture-8",
+    "name": "Lecture 8 — OOP in Python",
+    "semester": 1,
+    "subject": "python",
+    "category": "notes",
+    "file": "sem-1/python/notes/lecture8-py.pdf"
+  },
+  {
+    "id": "html-class-notes",
+    "name": "Class Notes — HTML",
+    "semester": 1,
+    "subject": "html",
+    "category": "notes",
+    "file": "sem-1/html/notes/class-notes-compressed.pdf"
+  },
+  {
+    "id": "dea-syllabus",
+    "name": "Syllabus",
+    "semester": 1,
+    "subject": "data-engineering-analytics",
+    "category": "notes",
+    "file": "sem-1/data-engineering-analytics/notes/de-syllabus.pdf"
+  }
+]
